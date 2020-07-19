@@ -5,5 +5,8 @@ module.exports =  {
       preProcessor: 'less',
       patterns: [path.resolve(__dirname, "src/style/variable.less")] // 引入全局样式变量
     }
-}
+  },
+  devServer: {
+    proxy: 'http://192.168.0.10:3000'
+  }
 }

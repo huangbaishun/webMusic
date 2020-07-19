@@ -46,12 +46,12 @@ export default {
     };
   },
   mounted() {
-    setTimeout(() => {
+    this.$nextTick(() => {
       this._setSliderWidth()
       this.initDots()
       this.initSlider()
       if(this.autoPlay) this._play()
-    }, 20);
+    })
 
     window.addEventListener('resize', ()=>{
       if (!this.slider) return
@@ -131,6 +131,9 @@ export default {
         this.slider.goToPage(pageIndex, 0, 400)
       }, this.interval)
     }
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer)
   },
 };
 </script>
