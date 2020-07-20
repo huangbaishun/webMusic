@@ -5,8 +5,13 @@ import router from './router'
 import store from './store'
 import './style/index.less'
 import FastClick from 'fastclick'
-
+import VueLazyload from 'vue-lazyload'
 Vue.config.productionTip = false
+
+Vue.use(VueLazyload, {
+  loading: require('@/assets/imgs/loading.gif')
+})
+
 
 if ('addEventListener' in document) {
 	document.addEventListener('DOMContentLoaded', function() {

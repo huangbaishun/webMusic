@@ -30,6 +30,7 @@ export default {
     .item-link {
       flex: 1;
       text-align: center;
+      color: @color-text-l;
       &.router-link-active {
         .item {
           color: @color-theme;

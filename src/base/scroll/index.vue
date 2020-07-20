@@ -1,13 +1,14 @@
 <template>
   <div ref="wrapper">
-    <slot></slot>
+    <div class="content">
+      <slot></slot>
+    </div>
   </div>
 </template>
 <script>
-// import BScroll from '@better-scroll/core'
-// import Slide from '@better-scroll/slide'
-// BScroll.use(Slide)
-import BScroll from 'better-scroll'
+import BScroll from '@better-scroll/core'
+import Slide from '@better-scroll/slide'
+BScroll.use(Slide)
 
 export default {
   name: '',
@@ -25,15 +26,25 @@ export default {
     return {};
   },
   mounted() {
-    this.$nextTick(() => {
+    // this.$nextTick(() => {
+    //   this.initScroll()
+    // })
+    this.initScroll()
+    setTimeout(() => {
       this.initScroll()
-    })
+    }, 20)
   },
   methods: {
     initScroll() {
-      if(this.$refs.wrapper) return
+      if(!this.$refs.wrapper) return
       this.scroll = new BScroll(this.$refs.wrapper, {
         probeType: this.probeType,
+        scrollY: true,
+        scrollX: false,
+        useTransition: true,
+        momentum: false,
+        bounce: false,
+        stopPropagation: false,
       })
     },
     refresh() {
@@ -43,7 +54,7 @@ export default {
   watch: {
     data() {
       this.$nextTick(() => {
-        this.refresh()
+        this.scroll.refresh()
       })
     }
   }
