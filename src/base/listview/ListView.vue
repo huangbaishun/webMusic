@@ -4,7 +4,7 @@
       <li v-for="group in data" :key="group.id" class="list-group" ref="listGroup">
         <h2 class="title">{{ group.title }}</h2>
         <ul>
-          <li v-for="item in group.arr" :key="item.uid" class="list-group-item">
+          <li v-for="item in group.arr" :key="item.uid" class="list-group-item" @click="singerDetailed(item)">
             <img v-lazy="item.img" alt="" class="avatar"/>
             <span class="name">{{ item.name }}</span>
           </li>
@@ -27,7 +27,7 @@ export default {
   props: {
     data: {
       type: Array,
-      default: () => []
+      default: () => {}
     }
   },
   computed: {
@@ -73,6 +73,9 @@ export default {
       }
       this.$refs.listGroup[index].scrollIntoView()
       // this.$refs.ulContent.style.transform = `translateY(${-this.listHeight[index]}px)`
+    },
+    singerDetailed(item) {
+      this.$emit('singerDetailed', item)
     }
   },
 };

@@ -1,8 +1,9 @@
-const CommonSiger = () => import('../components/CommonSiger')
+const CommonSiger = () => import('../components/CommonSiger/index')
 const CommonSearch = () => import('../components/CommonSearch')
 const CommonRank = () => import('../components/CommonRank')
-const CommonRecommed = () => import('../components/CommonRecommed')
+const CommonRecommed = () => import('../components/CommonRecommed/index')
 const NotFound = () => import('../components/NotFound/index')
+const SingerDetailed = () => import('../components/CommonSiger/SingerDetailed')
 
 const routes = [
   {
@@ -10,12 +11,18 @@ const routes = [
     redirect: '/recommed'
   },
   {
-    path: '/siger',
-    component: CommonSiger
-  },
-  {
     path: '/search',
     component: CommonSearch
+  },
+  {
+    path: '/singer',
+    component: CommonSiger,
+    children: [
+      {
+        path: ':uid',
+        component: SingerDetailed
+      }
+    ]
   },
   {
     path: '/rank',

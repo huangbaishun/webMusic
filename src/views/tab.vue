@@ -3,7 +3,7 @@
     <router-link to="recommed" class="item-link">
       <span class="item">推荐</span>
     </router-link>
-    <router-link to="siger" class="item-link">
+    <router-link to="singer" class="item-link">
       <span class="item">歌手</span>
     </router-link>
     <router-link to="rank" class="item-link">

@@ -1,12 +1,14 @@
 <template>
   <div class="singer">
-    <list-view :data="singers">
-
+    <list-view :data="singers" @singerDetailed="singerDetailed">
     </list-view>
+    <RouterView />
   </div>
 </template>
 <script>
 import ListView from '@/base/listview/ListView.vue'
+import { mapMutations } from 'vuex'
+// import VirtualList from 'vue-virtual-scroll-list'
 export default {
   name: '',
   data() {
@@ -18,7 +20,7 @@ export default {
         {'img': require('@/assets/imgs/wang.jpg'), name: '王力宏'},
         {'img': require('@/assets/imgs/xue.jpg'), name: '薛之谦'},
       ],
-      singers: []
+      singers: [],
     };
   },
   created() {
@@ -57,10 +59,20 @@ export default {
           item.arr.push(obj)
         })
       });
-    }
+    },
+    singerDetailed(item) {
+      this.setSinger(item)
+      this.$router.push({
+        path: `/singer/${item.uid}`
+      })
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    })
   },
   components: {
-    ListView
+    ListView,
+    // VirtualList,
   }
 };
 </script>
