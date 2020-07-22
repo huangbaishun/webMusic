@@ -12,11 +12,10 @@
       </div>
       <div class="recommed-list">
         <h1 class="title">热门歌单推荐</h1>
-        <div style="height: 300px; overflow: auto">
-          <ul>
+        <!-- <div style="height: 300px; overflow: hidden" class="wrapperhbs" ref="wrapperhbs">
+          <ul class="content">
             <li v-for="item in hostList" :key="item.id" class="item">
               <div class="icon">
-                <!-- <img :src="item.imgurl" alt="" width="60" height="60"> -->
                 <img alt="" width="60" height="60" v-lazy="item.imgurl">
               </div>
               <div class="text">
@@ -25,6 +24,21 @@
               </div>
             </li>
           </ul>
+        </div> height: calc(100% - 353px)-->
+        <div>
+          <scroll style="height: 300px;overflow: hidden" class="wrapperhbs" ref="scroll">
+            <ul class="content">
+              <li v-for="item in hostList" :key="item.id" class="item">
+                <div class="icon">
+                  <img alt="" width="60" height="60" v-lazy="item.imgurl">
+                </div>
+                <div class="text">
+                  <h2 class="name">{{ item.name }}</h2>
+                  <p class="desc">{{ item.desc }}</p>
+                </div>
+              </li>
+            </ul>
+          </scroll>
         </div>
       </div>
     </div>
@@ -32,6 +46,8 @@
 </template>
 <script>
 import Slider from '@/base/slider/slider'
+// import BScroll from '@better-scroll/core'
+import Scroll from '@/base/scroll/index'
 export default {
   name: '',
   data() {
@@ -54,19 +70,15 @@ export default {
   },
   components: {
     Slider,
+    Scroll
   },
   created() {
-    
+    this.setImg()
   },
   mounted() {
-    this._initList()
+    // this.$refs.scroll.$el.style.height = 'calc(100% - 353px)'
   },
   methods: {
-    _initList() {
-      this.$nextTick(() => {
-        this.setImg()
-      })
-    },
     setImg() {
       let len = new Array(6)
       let arr = []
