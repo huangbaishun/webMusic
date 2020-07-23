@@ -1,4 +1,4 @@
-# webmusic
+# Mobile WebMusic
 
 ## Project setup
 ```
