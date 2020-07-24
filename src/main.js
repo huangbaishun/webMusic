@@ -7,6 +7,8 @@ import './style/index.less'
 import FastClick from 'fastclick'
 import VueLazyload from 'vue-lazyload'
 Vue.config.productionTip = false
+import Vconsole from 'vconsole'
+Vue.use(new Vconsole())
 
 Vue.use(VueLazyload, {
   loading: require('@/assets/imgs/loading.gif')

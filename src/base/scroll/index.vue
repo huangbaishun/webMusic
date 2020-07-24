@@ -17,14 +17,18 @@ export default {
       type: Array,
       default: () => []
     },
+    listenScroll: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {};
   },
   mounted() {
-    setTimeout(() => {
+    this.$nextTick(() => {
       this.initScroll()
-    }, 20)
+    })
   },
   methods: {
     initScroll() {
@@ -32,15 +36,29 @@ export default {
       this.scroll = new BScroll(this.$refs.wrapperhbs, {
         probeType: this.probeType,
       })
+
+      if (this.listenScroll) {
+        let vm = this
+        this.scroll.on('scroll', (pos) => {
+          vm.$emit('scroll', pos)
+        })
+      }
     },
     refresh() {
       this.scroll && this.scroll.refresh()
+    },
+    scrollTo() {
+      // scrollTo会传入参数，此处用apply来用传入的参数调用 this.scroll.scrollTo
+      this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
+    },
+    scrollToElement() {
+      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
     }
   },
   watch: {
     data() {
       this.$nextTick(() => {
-        this.scroll.refresh()
+        this.refresh()
       })
     }
   }
