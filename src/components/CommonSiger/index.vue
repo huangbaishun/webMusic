@@ -48,6 +48,7 @@ export default {
         letters.push(obj)
       }
       this.singers = letters
+
       let uid = 0;
       letters.forEach(item => {
         this.singerList.forEach((it) => {

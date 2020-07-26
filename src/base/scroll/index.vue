@@ -35,6 +35,9 @@ export default {
       if(!this.$refs.wrapperhbs) return
       this.scroll = new BScroll(this.$refs.wrapperhbs, {
         probeType: this.probeType,
+        // stopPropagation: false,
+        // tap: true,
+        click: true,
       })
 
       if (this.listenScroll) {

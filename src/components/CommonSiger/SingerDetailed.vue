@@ -28,14 +28,17 @@ export default {
   },
   methods: {
     init() {
-      if (!this.singerdDetailed.uid) {
+      if (typeof this.singerdDetailed.uid !== 'number') {
         this.$router.push({
           path: '/singer'
         })
       }
       let arr = []
       for (let index = 0; index < 20; index++) {
-        arr.push('一路向北'+ index)
+        arr.push({
+          name: '一路向北'+ index,
+          desc: 'very good son --------------------------'
+        })
       }
       this.$set(this.singerdDetailed, 'arr', arr)
       // this.songs = this._normalizeSongs(this.singerdDetailed)

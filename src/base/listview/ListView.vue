@@ -17,6 +17,10 @@
           <li v-for="(item, index) in shortcut" :key="item" class="item" :class="{'current': index === currentIndex}" :data-index="index">{{ item }}</li>
         </ul>
       </div>
+
+      <div class="list-fixed" v-if="fixedTitle" ref="fixed">
+        <h1 class="fixed-title">{{ fixedTitle }}</h1>
+      </div>
   </scroll>
 </template>
 <script>
@@ -36,12 +40,17 @@ export default {
       return this.data.map((group) => {
         return group.title.substr(0, 1)
       })
+    },
+    fixedTitle() {
+      if (this.scrollY > 0) return ''
+      return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
     }
   },
   data() {
     return {
       currentIndex: 0,
-      scrollY: -1
+      scrollY: -1,
+      diff: -1
     };
   },
   created() {
@@ -117,15 +126,21 @@ export default {
       for (let i = 0; i < listHeight.length -1; i++) {
         let h1 = listHeight[i]
         let h2 = listHeight[i + 1]
-        
         if (-newdata >= h1 && -newdata < h2) {
           this.currentIndex = i
+          this.diff = h2 + newdata
           return
         }
       }
-      console.log(listHeight.length);
       //当滚动到底部，且-newdata 大雨最后一个元素到上限
       this.currentIndex = listHeight.length -2
+    },
+    diff(newVal) {
+      // if (!newVal || newVal > 40)return
+      let fixtop = (newVal > 0 && newVal < 30) ? newVal - 30 : 0;
+      if (this.fixtop === fixtop) return // 节流处理
+      this.fixtop = fixtop
+      this.$refs.fixed.style.transform = `translate3d(0, ${this.fixtop}px, 0)`
     }
   },
   components: {
@@ -153,12 +168,13 @@ export default {
     background: @color-highlight-background;
   }
   .list-group-item {
+    padding: 10px 20px;
     .avatar {
       width: 60px;
       height: 60px;
       vertical-align: middle;
       border-radius: 50%;
-      padding: 10px 20px;
+      margin-right: 10px;
     }
     .name{
       font-size: @font-size-medium;
@@ -185,6 +201,20 @@ export default {
     &.current {
       color: @color-theme;
     }
+  }
+}
+.list-fixed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  .fixed-title {
+    height: 30px;
+    line-height: 30px;
+    padding-left: 20px;
+    font-size: @font-size-medium;
+    color: @color-text-l;
+    background: @color-highlight-background;
   }
 }
 </style>
