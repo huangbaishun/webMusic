@@ -60,15 +60,35 @@ export default {
   },
   computed: {
     bgStyle() {
-      return `background-image:url(${this.bgImage});background-position-y:30%`
+      // background-position-y:30%
+      return `background-image:url(${this.bgImage});`
     }
   },
   watch: {
     scrollY(newY) {
+      
       let translateY = Math.max(this.minTranslateY, newY)
       
       this.$refs.layer.style.transform = `translate3d(0, ${translateY}px, 0)`
       this.$refs.layer.style['webkit-transform'] = `translate3d(0, ${translateY}px, 0)`
+
+      let zIndex = 5
+      let scale = 1
+      let precent = 1 + Math.abs(newY / this.bgHeight)
+      if (newY > 0) {
+        zIndex = 15
+        this.$refs.bgImg.style.transform = `scale(${precent})`
+        this.$refs.bgImg.style['webkit-transform'] = `scale(${precent})`
+      }
+      if (newY < this.minTranslateY) {
+        zIndex = 15
+        this.$refs.bgImg.style.height = `${TRANSLATE_TOP}px`
+        this.$refs.bgImg.style.paddingTop = '0px'
+      } else {
+        this.$refs.bgImg.style.height = '0px'
+        this.$refs.bgImg.style.paddingTop = '70%'
+      }
+      this.$refs.bgImg.style.zIndex = zIndex
     }
   },
   created() {
@@ -118,7 +138,7 @@ export default {
     position: relative;
     width: 100%;
     height: 0;
-    padding-top: 60%;
+    padding-top: 70%;
     transform-origin: top;
     background-size: cover;
     z-index: 5;
