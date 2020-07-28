@@ -1,10 +1,16 @@
 <template>
   <div class="music-list">
-    <div class="back">
+    <div class="back" @click="back">
       <i class="icon-back iconfont icondirection-left"></i>
     </div>
     <h2 class="title">{{ title }}</h2>
     <div class="bg-image" :style="bgStyle" ref="bgImg">
+      <div class="play-wrapper">
+        <div ref="playBtn" v-show="songs.arr && songs.arr.length>0" class="play">
+          <i class="iconfont icon-play iconicon-test1"></i>
+          <span class="text">随机播放全部</span>
+        </div>
+      </div>
       <div class="filter"></div>
     </div>
     
@@ -23,8 +29,10 @@
 <script>
 import Scroll from '@/base/scroll/index'
 import SongList from '@/base/songlist/SongList'
+import { prefixStyle } from '@/utils/dom'
 
 const TRANSLATE_TOP = 40
+const transform = prefixStyle('transform')
 export default {
   name: 'MusicList',
   data() {
@@ -66,11 +74,11 @@ export default {
   },
   watch: {
     scrollY(newY) {
-      
       let translateY = Math.max(this.minTranslateY, newY)
       
-      this.$refs.layer.style.transform = `translate3d(0, ${translateY}px, 0)`
-      this.$refs.layer.style['webkit-transform'] = `translate3d(0, ${translateY}px, 0)`
+      // this.$refs.layer.style.transform = `translate3d(0, ${translateY}px, 0)`
+      // this.$refs.layer.style['webkit-transform'] = `translate3d(0, ${translateY}px, 0)`
+      this.$refs.layer.style[transform] = `translate3d(0, ${translateY}px, 0)`
 
       let zIndex = 5
       let scale = 1
@@ -98,6 +106,9 @@ export default {
   methods: {
     scroll(pos) {
       this.scrollY = pos.y // 向上负值
+    },
+    back() {
+      this.$router.back()
     }
   },
 };
@@ -142,6 +153,33 @@ export default {
     transform-origin: top;
     background-size: cover;
     z-index: 5;
+    .play-wrapper {
+      position: absolute;
+      bottom: 40px;
+      z-index: 50;
+      width: 100%;
+      .play {
+        width: 135px;
+        padding: 7px 0;
+        margin: 0 auto;
+        text-align: center;
+        border: 1px solid @color-theme;
+        color: @color-theme;
+        border-radius: 100px;
+        font-size: 0;
+        .icon-play {
+          display: inline-block;
+          vertical-align: middle;
+          margin-right: 6px;
+          font-size: @font-size-medium-x;
+        }
+        .text {
+          display: inline-block;
+          vertical-align: middle;
+          font-size: @font-size-small;
+        }
+      }
+    }
     .filter {
       position: absolute;
       top: 0;
