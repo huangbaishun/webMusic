@@ -1,7 +1,7 @@
 <template>
   <div class="song-list">
     <ul>
-      <li v-for="item in songs" :key="item.uid" class="item">
+      <li v-for="(item, index) in songs" :key="item.uid" class="item" @click="selectItem(item, index)">
         <div class="content">
           <h2 class="name no-warp">{{ item.name }}</h2>
           <p class="desc no-warp">{{ item.desc }}</p>
@@ -21,6 +21,11 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    selectItem(item, index) {
+      this.$emit('clickSongItem', item, index)
+    }
   },
 };
 </script>

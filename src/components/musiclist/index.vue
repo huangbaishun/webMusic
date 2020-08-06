@@ -16,7 +16,7 @@
     
     <div class="bg-layer" ref="layer"></div>
     <scroll :data="songs.arr" class="list" ref="list" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
-      <song-list :songs="songs.arr">
+      <song-list :songs="songs.arr" @clickSongItem="clickSongItem">
         <!-- <div class="list" ref="list-song">
         <ul>
           <li v-for="item in songs.arr" :key="item.uid" class="li-list">{{ item }}</li>
@@ -30,6 +30,7 @@
 import Scroll from '@/base/scroll/index'
 import SongList from '@/base/songlist/SongList'
 import { prefixStyle } from '@/utils/dom'
+import { mapActions } from 'vuex'
 
 const TRANSLATE_TOP = 40
 const transform = prefixStyle('transform')
@@ -109,7 +110,17 @@ export default {
     },
     back() {
       this.$router.back()
-    }
+    },
+    clickSongItem(item, index) {
+      let other = {
+        img: this.songs.img || '',
+        name: this.songs.name || ''
+      }
+      this.selectPlay({list: this.songs.arr || [], index, other})
+    },
+    ...mapActions([
+      'selectPlay'
+    ])
   },
 };
 </script>

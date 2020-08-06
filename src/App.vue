@@ -3,15 +3,18 @@
     <CommonHeader />
     <Tab />
     <RouterView />
+    <player></player>
   </div>
 </template>
 <script>
 import CommonHeader from '@/components/CommonHeader/index.vue'
 import Tab from '@/views/tab.vue'
+import Player from '@/components/player/player.vue'
 export default {
   components: {
     CommonHeader,
-    Tab
+    Tab,
+    Player
   }
 }
 </script>

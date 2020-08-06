@@ -1,0 +1,205 @@
+{
+  "id": "1952373",
+  "name": "webMusic",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "529791",
+      "name": "音乐播放",
+      "font_class": "you-copy",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "872620",
+      "name": "音乐播放按钮",
+      "font_class": "yinlebofanganniu",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "1424429",
+      "name": "音乐播放",
+      "font_class": "yinlebofang",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "1770793",
+      "name": "音乐播放",
+      "font_class": "yinlebofang1",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "2772134",
+      "name": "音乐 播放 旋律",
+      "font_class": "yinlebofangxuanlv",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "12381444",
+      "name": "音乐-播放",
+      "font_class": "yinle-bofang",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "14191073",
+      "name": "音乐播放图标",
+      "font_class": "zhongbo",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "15330800",
+      "name": "音乐播放页-播放列表",
+      "font_class": "yinlebofangye-bofangliebiao",
+      "unicode": "e687",
+      "unicode_decimal": 59015
+    },
+    {
+      "icon_id": "15330802",
+      "name": "音乐播放页-爱心",
+      "font_class": "yinlebofangye-aixin",
+      "unicode": "e688",
+      "unicode_decimal": 59016
+    },
+    {
+      "icon_id": "15330806",
+      "name": "音乐播放页-暂停",
+      "font_class": "yinlebofangye-zanting",
+      "unicode": "e689",
+      "unicode_decimal": 59017
+    },
+    {
+      "icon_id": "15330807",
+      "name": "音乐播放页-下一首",
+      "font_class": "yinlebofangye-xiayishou",
+      "unicode": "e68a",
+      "unicode_decimal": 59018
+    },
+    {
+      "icon_id": "15331322",
+      "name": "音乐播放页-播放",
+      "font_class": "yinlebofangye-bofang",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "15331323",
+      "name": "音乐播放页-上一首",
+      "font_class": "yinlebofangye-shangyishou",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "15331329",
+      "name": "音乐播放页-爱心-激活",
+      "font_class": "yinlebofangye-aixin-jihuo",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "15331348",
+      "name": "音乐播放页-随机播放",
+      "font_class": "yinlebofangye-suijibofang",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "7766775",
+      "name": "icon_patriarch",
+      "font_class": "icon_patriarch",
+      "unicode": "eb9a",
+      "unicode_decimal": 60314
+    },
+    {
+      "icon_id": "8776842",
+      "name": "search",
+      "font_class": "icon-test",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "8776879",
+      "name": "play",
+      "font_class": "icon-test1",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "8777492",
+      "name": "like",
+      "font_class": "icon-test2",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "8777493",
+      "name": "like_filled",
+      "font_class": "icon-test3",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "8777494",
+      "name": "star",
+      "font_class": "icon-test4",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "8777495",
+      "name": "star_filled",
+      "font_class": "icon-test5",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "15838431",
+      "name": "arrow-right",
+      "font_class": "arrow-right",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
+      "icon_id": "15838444",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "15838460",
+      "name": "direction-right",
+      "font_class": "direction-right",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "15838463",
+      "name": "direction-left",
+      "font_class": "direction-left",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "15838474",
+      "name": "favorite",
+      "font_class": "favorite",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "15838479",
+      "name": "fabulous",
+      "font_class": "fabulous",
+      "unicode": "e670",
+      "unicode_decimal": 58992
+    }
+  ]
+}

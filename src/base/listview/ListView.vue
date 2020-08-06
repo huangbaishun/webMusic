@@ -18,7 +18,7 @@
         </ul>
       </div>
 
-      <div class="list-fixed" v-if="fixedTitle" ref="fixed">
+      <div class="list-fixed" v-show="fixedTitle" ref="fixed">
         <h1 class="fixed-title">{{ fixedTitle }}</h1>
       </div>
   </scroll>

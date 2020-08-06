@@ -43,3 +43,17 @@ export function prefixStyle(style) {
   if (vender === 'standard') return style
   return vender + style.charAt(0).toUpperCase() + style.substr(1)
 }
+export function thorttle(func, wait = 1000) {
+  let timeout;
+  return function() {
+    let context = this;
+    let args = arguments;
+    if (!timeout) {
+      timeout = setTimeout(() => {
+          timeout = null;
+          console.log(context);
+          func.apply(context, args)
+      }, wait)
+    }
+  }
+}

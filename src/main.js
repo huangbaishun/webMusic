@@ -7,6 +7,7 @@ import './style/index.less'
 import FastClick from 'fastclick'
 import VueLazyload from 'vue-lazyload'
 Vue.config.productionTip = false
+// import 'lib-flexible' 
 // import Vconsole from 'vconsole'
 // Vue.use(new Vconsole())
 
