@@ -40,11 +40,11 @@
             <span class="dot"></span>
           </div>
           <div class="progress-wrapper">
-            <span class="time time-l"></span>
+            <span class="time time-l">{{ format(currentTime) }}</span>
             <div class="progress-bar-wrapper">
-              <!-- <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar> -->
+              <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>
             </div>
-            <span class="time time-r"></span>
+            <span class="time time-r">{{ format(currentSong.alltime) }}</span>
           </div>
           <div class="operators">
             <div class="icon i-left">
@@ -86,19 +86,21 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.songurl" @canplay="ready"></audio>
+    <audio ref="audio" :src="currentSong.songurl" @canplay="ready" @error="error" @timeupdate="timeupdate"></audio>
   </div>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import animations from "create-keyframe-animation"
 import { prefixStyle } from "../../utils/dom"
+import progressBar from '@/base/progressbar/progressBar'
 const transform = prefixStyle('transform')
 export default {
   name: '',
   data() {
     return {
-      readySong: false
+      readySong: false,
+      currentTime: 0
     };
   },
   computed: {
@@ -114,6 +116,9 @@ export default {
     },
     togglePalyingcls() {
       return this.palying ? 'iconyinlebofangye-zanting' : 'iconyinlebofangye-bofang' 
+    },
+    percent() {
+      return this.currentTime / this.currentSong.alltime
     }
   },
   watch: {
@@ -211,12 +216,36 @@ export default {
     togglePlay() {
       if (!this.readySong) return // audio在加载的时候，禁止连续点击它
       this.setPlayStatus(!this.palying)
-      this.readySong = false
+      // this.readySong = false
     },
     ready() {
       this.readySong = true
+    },
+    error() {
+      this.readySong = true
+    },
+    timeupdate(e) {
+      //e.target.currentTime可读写
+      this.currentTime = e.target.currentTime
+    },
+    format(time) {
+      time = parseInt(time) | 0
+      let second = time % 60 | 0
+      let minute = time / 60 | 0
+      second = second < 10 ? `0${second}` : second
+      // minute = minute < 10 ? `0${minute}` : minute
+      return `${minute}:${second}`
+    },
+    onProgressBarChange(percent) {
+      this.$refs.audio.currentTime = this.currentSong.alltime * percent
+      if (!this.palying) {
+        this.togglePlay()
+      }
     }
   },
+  components: {
+    progressBar
+  }
 };
 </script>
 <style lang='less' scoped>

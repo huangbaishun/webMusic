@@ -20,7 +20,8 @@ function addSong(list, other) {
       ...item,
       title: other.name,
       img: other.img,
-      songurl: index%2 ==0 ? obj[1] : obj[2]
+      songurl: index%2 ==0 ? obj[1] : obj[2],
+      alltime: index%2 ==0 ? '257' : '226',
     }
   })
 }
