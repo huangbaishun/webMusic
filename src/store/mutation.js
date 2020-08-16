@@ -18,5 +18,8 @@ const mutations = {
   [types.SET_PLAYSTATUS] (state, flag) {
     state.playing = flag
   },
+  [types.SET_PLAYMODE] (state, mode) {
+    state.mode = mode
+  }
 }
 export default mutations

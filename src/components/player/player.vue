@@ -1,6 +1,7 @@
 <template>
   <div class="player" v-show="playList.length">
-    <transition name="normal"
+    <transition
+      name="normal"
       @enter="enter"
       @after-enter="afterEnter"
       @leave="leave"
@@ -8,7 +9,7 @@
     >
       <div class="normal-player" v-show="fullScreen">
         <div class="background">
-          <img width="100%" height="100%" :src="currentSong.img">
+          <img width="100%" height="100%" :src="currentSong.img" />
         </div>
         <div class="top">
           <div class="back" @click="back">
@@ -22,7 +23,7 @@
             <div class="cd-wrapper" ref="cdWrapper">
               <div class="cd" :class="cdCls">
                 <!-- img 标签可以出现白色的边框 -->
-                <img class="image" :src="currentSong.img"> 
+                <img class="image" :src="currentSong.img" />
               </div>
             </div>
             <div class="playing-lyric-wrapper">
@@ -30,34 +31,49 @@
             </div>
           </div>
           <div class="middle-r">
-            <div class="lyric-wrapper">
-            </div>
+            <div class="lyric-wrapper"></div>
           </div>
         </div>
         <div class="bottom">
           <div class="dot-wrapper">
-            <span class="dot"></span>
-            <span class="dot"></span>
+            <span class="dot" :class="{ active: currentShow === 'cd' }"></span>
+            <span
+              class="dot"
+              :class="{ active: currentShow === 'lyric' }"
+            ></span>
           </div>
           <div class="progress-wrapper">
             <span class="time time-l">{{ format(currentTime) }}</span>
             <div class="progress-bar-wrapper">
-              <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>
+              <progress-bar
+                :percent="percent"
+                @percentChange="onProgressBarChange"
+              ></progress-bar>
             </div>
             <span class="time time-r">{{ format(currentSong.alltime) }}</span>
           </div>
           <div class="operators">
             <div class="icon i-left">
-              <i class="iconfont iconyinlebofangye-bofangliebiao"></i>
+              <i class="iconfont" :class="modeCls" @click="modeChange"></i>
             </div>
             <div class="icon i-left">
-              <i @click="prvePlay" class="iconfont iconyinlebofangye-shangyishou"></i>
+              <i
+                @click="prvePlay"
+                class="iconfont iconyinlebofangye-shangyishou"
+              ></i>
             </div>
             <div class="icon i-center">
-              <i @click="togglePlay" :class="togglePalyingcls" class="iconfont"></i>
+              <i
+                @click="togglePlay"
+                :class="togglePalyingcls"
+                class="iconfont"
+              ></i>
             </div>
             <div class="icon i-right">
-              <i @click="nextPlay" class="iconfont iconyinlebofangye-xiayishou"></i>
+              <i
+                @click="nextPlay"
+                class="iconfont iconyinlebofangye-xiayishou"
+              ></i>
             </div>
             <div class="icon i-right">
               <i class="iconfont iconyinlebofangye-aixin"></i>
@@ -69,14 +85,18 @@
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="open">
         <div class="icon">
-          <img :class="cdCls" width="40" height="40" :src="currentSong.img">
+          <img :class="cdCls" width="40" height="40" :src="currentSong.img" />
         </div>
         <div class="text">
           <h2 class="name">{{ currentSong.name }}</h2>
           <p class="desc">{{ currentSong.title }}</p>
         </div>
         <div class="control">
-          <i :class="togglePalyingcls" class="iconfont" @click.stop="togglePlay"></i>
+          <i
+            :class="togglePalyingcls"
+            class="iconfont"
+            @click.stop="togglePlay"
+          ></i>
           <!-- <progress-circle :radius="radius" :percent="percent">
             <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
           </progress-circle> -->
@@ -86,166 +106,221 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.songurl" @canplay="ready" @error="error" @timeupdate="timeupdate"></audio>
+    <audio
+      ref="audio"
+      :src="currentSong.songurl"
+      @canplay="ready"
+      @error="error"
+      @timeupdate="timeupdate"
+      @ended="endAudio"
+    ></audio>
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations } from 'vuex'
-import animations from "create-keyframe-animation"
-import { prefixStyle } from "../../utils/dom"
-import progressBar from '@/base/progressbar/progressBar'
-const transform = prefixStyle('transform')
+import { mapGetters, mapMutations } from "vuex";
+import animations from "create-keyframe-animation";
+import { prefixStyle } from "../../utils/dom";
+import progressBar from "@/base/progressbar/progressBar";
+import { palyMode } from "@/utils/config";
+import { randomArr } from "@/utils/common";
+const transform = prefixStyle("transform");
 export default {
-  name: '',
+  name: "",
   data() {
     return {
       readySong: false,
-      currentTime: 0
+      currentTime: 0,
+      currentShow: "cd",
     };
   },
   computed: {
     ...mapGetters([
-      'fullScreen',
-      'playList',
-      'currentSong',
-      'palying',
-      'currentPlayIndex'
+      "fullScreen",
+      "playList",
+      "currentSong",
+      "palying",
+      "currentPlayIndex",
+      "mode",
+      "sequenceList",
     ]),
     cdCls() {
-      return this.palying ? 'play' : 'play pause'
+      return this.palying ? "play" : "play pause";
     },
     togglePalyingcls() {
-      return this.palying ? 'iconyinlebofangye-zanting' : 'iconyinlebofangye-bofang' 
+      return this.palying
+        ? "iconyinlebofangye-zanting"
+        : "iconyinlebofangye-bofang";
+    },
+    modeCls() {
+      return this.mode === palyMode.sequence
+        ? "iconyinlebofangye-bofangliebiao"
+        : this.mode === palyMode.loop
+        ? "iconzhongbo"
+        : "iconyinlebofangye-suijibofang";
     },
     percent() {
-      return this.currentTime / this.currentSong.alltime
-    }
+      return this.currentTime / this.currentSong.alltime;
+    },
   },
   watch: {
-    currentSong() {
+    currentSong(newD, lodD) {
+      if (lodD.name === newD.name) return; //切换mode时，暂停的时候也会自动播放
       this.$nextTick(() => {
-        this.$refs.audio.play()
-      })
+        this.$refs.audio.play();
+      });
     },
     palying(newP) {
-      const audio = this.$refs.audio
+      const audio = this.$refs.audio;
       this.$nextTick(() => {
-        newP ? audio.play() : audio.pause()
-      })
-    }
+        newP ? audio.play() : audio.pause();
+      });
+    },
   },
   methods: {
     ...mapMutations({
-      setFullScreen: 'SET_FULLSCREEN',
-      setPlayStatus :'SET_PLAYSTATUS',
-      setCurPlayIndex: 'SET_CURRENT_PLAYINDEX'
+      setFullScreen: "SET_FULLSCREEN",
+      setPlayStatus: "SET_PLAYSTATUS",
+      setCurPlayIndex: "SET_CURRENT_PLAYINDEX",
+      setPlayMode: "SET_PLAYMODE",
+      setPlayList: "SET_PLAYLIST",
     }),
     back() {
-      this.setFullScreen(false)
+      this.setFullScreen(false);
     },
     open() {
-      this.setFullScreen(true)
+      this.setFullScreen(true);
     },
     enter(el, done) {
-      const {x, y, scale} = this._getPosAndScale()
+      const { x, y, scale } = this._getPosAndScale();
       const animation = {
         0: {
           // 左下角位置
-          transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
+          transform: `translate3d(${x}px,${y}px,0) scale(${scale})`,
         },
         60: {
-          transform: `translate3d(0,0,0) scale(1.1)`
+          transform: `translate3d(0,0,0) scale(1.1)`,
         },
         100: {
-          transform: `translate3d(0,0,0) scale(1)`
-        }
-      }
+          transform: `translate3d(0,0,0) scale(1)`,
+        },
+      };
       animations.registerAnimation({
-        name: 'move',
+        name: "move",
         animation,
         presets: {
           duration: 400,
-          easing: 'linear'
-        }
-      })
-      animations.runAnimation(this.$refs.cdWrapper, 'move', done)
+          easing: "linear",
+        },
+      });
+      animations.runAnimation(this.$refs.cdWrapper, "move", done);
     },
     afterEnter(el) {
-      animations.unregisterAnimation('move')
-      this.$refs.cdWrapper.style.animation = ''
+      animations.unregisterAnimation("move");
+      this.$refs.cdWrapper.style.animation = "";
     },
     leave(el, done) {
-      this.$refs.cdWrapper.style.transition = 'all .4s'
-      const {x, y, scale} = this._getPosAndScale()
-      this.$refs.cdWrapper.style[transform] = `translate3d(${x}px,${y}px,0) scale(${scale})`
-      this.$refs.cdWrapper.addEventListener('transitionend', done)
+      this.$refs.cdWrapper.style.transition = "all .4s";
+      const { x, y, scale } = this._getPosAndScale();
+      this.$refs.cdWrapper.style[
+        transform
+      ] = `translate3d(${x}px,${y}px,0) scale(${scale})`;
+      this.$refs.cdWrapper.addEventListener("transitionend", done);
     },
     afterLeave(el) {
-      this.$refs.cdWrapper.style[transform] = ''
-      this.$refs.cdWrapper.style.transition = ''
+      this.$refs.cdWrapper.style[transform] = "";
+      this.$refs.cdWrapper.style.transition = "";
     },
     _getPosAndScale() {
-      const left = 40
-      const bottom = 30
-      const width = 40
-      const endWidth = window.innerWidth * 0.8
-      const endTop = 80
-      const scale = width / endWidth
-      const x = -(endWidth / 2 - left)
-      const y = window.innerHeight - endTop - endWidth / 2 - bottom
+      const left = 40;
+      const bottom = 30;
+      const width = 40;
+      const endWidth = window.innerWidth * 0.8;
+      const endTop = 80;
+      const scale = width / endWidth;
+      const x = -(endWidth / 2 - left);
+      const y = window.innerHeight - endTop - endWidth / 2 - bottom;
       return {
         x,
         y,
-        scale
+        scale,
+      };
+    },
+    modeChange() {
+      const mode = (this.mode + 1) % 3;
+      this.setPlayMode(mode);
+      let list = null;
+      if (mode === palyMode.random) {
+        list = randomArr(this.sequenceList);
+      } else {
+        list = this.sequenceList;
       }
+      let index = list.findIndex((item) => item.name === this.currentSong.name);
+      this.setCurPlayIndex(index);
+      this.setPlayList(list);
     },
     prvePlay() {
-      if (!this.readySong) return // audio在加载的时候，禁止连续点击它
-      let idx = this.currentPlayIndex === 0 ? this.playList.length - 1 :  this.currentPlayIndex - 1
-      this.setCurPlayIndex(idx)
-      this.setPlayStatus(true)
-      this.readySong = false
+      if (!this.readySong) return; // audio在加载的时候，禁止连续点击它
+      let idx =
+        this.currentPlayIndex === 0
+          ? this.playList.length - 1
+          : this.currentPlayIndex - 1;
+      this.setCurPlayIndex(idx);
+      this.setPlayStatus(true);
+      this.readySong = false;
+      this.$refs.audio.load();
     },
     nextPlay() {
-      if (!this.readySong) return // audio在加载的时候，禁止连续点击它
-      let idx = this.currentPlayIndex >= this.playList.length - 1 ? 0 :  this.currentPlayIndex + 1 
-      this.setCurPlayIndex(idx)
-      this.setPlayStatus(true)
-      this.readySong = false
+      if (!this.readySong) return; // audio在加载的时候，禁止连续点击它
+      let idx =
+        this.currentPlayIndex >= this.playList.length - 1
+          ? 0
+          : this.currentPlayIndex + 1;
+      this.setCurPlayIndex(idx);
+      this.setPlayStatus(true);
+      this.readySong = false;
+      this.$refs.audio.load();
     },
     togglePlay() {
-      if (!this.readySong) return // audio在加载的时候，禁止连续点击它
-      this.setPlayStatus(!this.palying)
+      if (!this.readySong) return; // audio在加载的时候，禁止连续点击它
+      this.setPlayStatus(!this.palying);
       // this.readySong = false
     },
     ready() {
-      this.readySong = true
+      this.readySong = true;
     },
     error() {
-      this.readySong = true
+      this.readySong = true;
     },
     timeupdate(e) {
       //e.target.currentTime可读写
-      this.currentTime = e.target.currentTime
+      this.currentTime = e.target.currentTime;
+    },
+    endAudio(e) {
+      if (this.mode === palyMode.loop) {
+        this.$refs.audio.currentTime = 0;
+        this.$refs.audio.play();
+      } else {
+        this.nextPlay();
+      }
     },
     format(time) {
-      time = parseInt(time) | 0
-      let second = time % 60 | 0
-      let minute = time / 60 | 0
-      second = second < 10 ? `0${second}` : second
+      time = parseInt(time) | 0;
+      let second = time % 60 | 0;
+      let minute = (time / 60) | 0;
+      second = second < 10 ? `0${second}` : second;
       // minute = minute < 10 ? `0${minute}` : minute
-      return `${minute}:${second}`
+      return `${minute}:${second}`;
     },
     onProgressBarChange(percent) {
-      this.$refs.audio.currentTime = this.currentSong.alltime * percent
+      this.$refs.audio.currentTime = this.currentSong.alltime * percent;
       if (!this.palying) {
-        this.togglePlay()
+        this.togglePlay();
       }
-    }
+    },
   },
   components: {
-    progressBar
-  }
+    progressBar,
+  },
 };
 </script>
 <style lang='less' scoped>
@@ -284,7 +359,7 @@ export default {
           transform: rotate(-90deg);
         }
       }
-      
+
       .title {
         width: 70%;
         margin: 0 auto;
@@ -430,14 +505,14 @@ export default {
           flex: 1;
           color: @color-theme;
           &.disable {
-            color: @color-theme-d
+            color: @color-theme-d;
           }
           i {
             // font-size: 30px
           }
         }
         .i-left {
-          text-align: right
+          text-align: right;
         }
         .i-center {
           padding: 0 20px;
@@ -448,25 +523,28 @@ export default {
         }
         .i-right {
           text-align: left;
-          }
-        .icon-favorite{
-          color: @color-sub-theme
+        }
+        .icon-favorite {
+          color: @color-sub-theme;
         }
       }
     }
-    &.normal-enter-active, &.normal-leave-active {
-      transition: all .4s;
-      .top, .bottom {
-        transition: all 0.4s cubic-bezier(0.86, 0.18, 0.82, 1.32)
+    &.normal-enter-active,
+    &.normal-leave-active {
+      transition: all 0.4s;
+      .top,
+      .bottom {
+        transition: all 0.4s cubic-bezier(0.86, 0.18, 0.82, 1.32);
       }
     }
-    &.normal-enter, &.normal-leave-to {
+    &.normal-enter,
+    &.normal-leave-to {
       opacity: 0;
       .top {
-        transform: translate3d(0, -100px, 0)
+        transform: translate3d(0, -100px, 0);
       }
       .bottom {
-        transform: translate3d(0, 100px, 0)
+        transform: translate3d(0, 100px, 0);
       }
     }
   }
@@ -518,7 +596,9 @@ export default {
       flex: 0 0 30px;
       width: 30px;
       // padding: 0 10px;
-      .icon-play-mini, .icon-pause-mini, .icon-playlist {
+      .icon-play-mini,
+      .icon-pause-mini,
+      .icon-playlist {
         font-size: 30px;
         color: @color-theme-d;
       }
@@ -532,11 +612,13 @@ export default {
         // font-size: 20px;
       }
     }
-    &.mini-enter-active, &.mini-leave-active {
-      transition: all 0.4s
+    &.mini-enter-active,
+    &.mini-leave-active {
+      transition: all 0.4s;
     }
-    &.mini-enter, &.mini-leave-to {
-      opacity: 0
+    &.mini-enter,
+    &.mini-leave-to {
+      opacity: 0;
     }
   }
 }

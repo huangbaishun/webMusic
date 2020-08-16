@@ -6,16 +6,28 @@
     <h2 class="title">{{ title }}</h2>
     <div class="bg-image" :style="bgStyle" ref="bgImg">
       <div class="play-wrapper">
-        <div ref="playBtn" v-show="songs.arr && songs.arr.length>0" class="play">
+        <div
+          ref="playBtn"
+          v-show="songs.arr && songs.arr.length > 0"
+          class="play"
+          @click="palyRandom"
+        >
           <i class="iconfont icon-play iconicon-test1"></i>
           <span class="text">随机播放全部</span>
         </div>
       </div>
       <div class="filter"></div>
     </div>
-    
+
     <div class="bg-layer" ref="layer"></div>
-    <scroll :data="songs.arr" class="list" ref="list" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
+    <scroll
+      :data="songs.arr"
+      class="list"
+      ref="list"
+      :probe-type="probeType"
+      :listen-scroll="listenScroll"
+      @scroll="scroll"
+    >
       <song-list :songs="songs.arr" @clickSongItem="clickSongItem">
         <!-- <div class="list" ref="list-song">
         <ul>
@@ -27,33 +39,33 @@
   </div>
 </template>
 <script>
-import Scroll from '@/base/scroll/index'
-import SongList from '@/base/songlist/SongList'
-import { prefixStyle } from '@/utils/dom'
-import { mapActions } from 'vuex'
+import Scroll from "@/base/scroll/index";
+import SongList from "@/base/songlist/SongList";
+import { prefixStyle } from "@/utils/dom";
+import { mapActions } from "vuex";
 
-const TRANSLATE_TOP = 40
-const transform = prefixStyle('transform')
+const TRANSLATE_TOP = 40;
+const transform = prefixStyle("transform");
 export default {
-  name: 'MusicList',
+  name: "MusicList",
   data() {
     return {
-      scrollY: 0
+      scrollY: 0,
     };
   },
   props: {
     bgImage: {
       type: String,
-      default: ''
+      default: "",
     },
     title: {
       type: String,
-      default: ''
+      default: "",
     },
     songs: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   components: {
     Scroll,
@@ -62,43 +74,43 @@ export default {
   mounted() {
     // console.log(this.songs);
     // this.$refs['list-song'].style.top = this.$refs.bgImg.clientHeight + 'px'
-    this.bgHeight = this.$refs.bgImg.clientHeight
+    this.bgHeight = this.$refs.bgImg.clientHeight;
     // let height = this.$refs.bgImg.clientHeight
-    this.minTranslateY = -this.bgHeight + TRANSLATE_TOP
-    this.$refs.list.$el.style.top  = `${this.bgHeight}px`
+    this.minTranslateY = -this.bgHeight + TRANSLATE_TOP;
+    this.$refs.list.$el.style.top = `${this.bgHeight}px`;
   },
   computed: {
     bgStyle() {
       // background-position-y:30%
-      return `background-image:url(${this.bgImage});`
-    }
+      return `background-image:url(${this.bgImage});`;
+    },
   },
   watch: {
     scrollY(newY) {
-      let translateY = Math.max(this.minTranslateY, newY)
-      
+      let translateY = Math.max(this.minTranslateY, newY);
+
       // this.$refs.layer.style.transform = `translate3d(0, ${translateY}px, 0)`
       // this.$refs.layer.style['webkit-transform'] = `translate3d(0, ${translateY}px, 0)`
-      this.$refs.layer.style[transform] = `translate3d(0, ${translateY}px, 0)`
+      this.$refs.layer.style[transform] = `translate3d(0, ${translateY}px, 0)`;
 
-      let zIndex = 5
-      let scale = 1
-      let precent = 1 + Math.abs(newY / this.bgHeight)
+      let zIndex = 5;
+      let scale = 1;
+      let precent = 1 + Math.abs(newY / this.bgHeight);
       if (newY > 0) {
-        zIndex = 15
-        this.$refs.bgImg.style.transform = `scale(${precent})`
-        this.$refs.bgImg.style['webkit-transform'] = `scale(${precent})`
+        zIndex = 15;
+        this.$refs.bgImg.style.transform = `scale(${precent})`;
+        this.$refs.bgImg.style["webkit-transform"] = `scale(${precent})`;
       }
       if (newY < this.minTranslateY) {
-        zIndex = 15
-        this.$refs.bgImg.style.height = `${TRANSLATE_TOP}px`
-        this.$refs.bgImg.style.paddingTop = '0px'
+        zIndex = 15;
+        this.$refs.bgImg.style.height = `${TRANSLATE_TOP}px`;
+        this.$refs.bgImg.style.paddingTop = "0px";
       } else {
-        this.$refs.bgImg.style.height = '0px'
-        this.$refs.bgImg.style.paddingTop = '70%'
+        this.$refs.bgImg.style.height = "0px";
+        this.$refs.bgImg.style.paddingTop = "70%";
       }
-      this.$refs.bgImg.style.zIndex = zIndex
-    }
+      this.$refs.bgImg.style.zIndex = zIndex;
+    },
   },
   created() {
     this.probeType = 3;
@@ -106,21 +118,29 @@ export default {
   },
   methods: {
     scroll(pos) {
-      this.scrollY = pos.y // 向上负值
+      this.scrollY = pos.y; // 向上负值
     },
     back() {
-      this.$router.back()
+      this.$router.back();
     },
     clickSongItem(item, index) {
       let other = {
-        img: this.songs.img || '',
-        name: this.songs.name || ''
-      }
-      this.selectPlay({list: this.songs.arr || [], index, other})
+        img: this.songs.img || "",
+        name: this.songs.name || "",
+      };
+      this.selectPlay({ list: this.songs.arr || [], index, other });
     },
-    ...mapActions([
-      'selectPlay'
-    ])
+    palyRandom() {
+      let other = {
+        img: this.songs.img || "",
+        name: this.songs.name || "",
+      };
+      this.selectPlayRandom({
+        list: this.songs.arr || [],
+        other,
+      });
+    },
+    ...mapActions(["selectPlay", "selectPlayRandom"]),
   },
 };
 </script>
@@ -156,7 +176,7 @@ export default {
     font-size: @font-size-large;
     color: @color-text;
   }
-  .bg-image{
+  .bg-image {
     position: relative;
     width: 100%;
     height: 0;

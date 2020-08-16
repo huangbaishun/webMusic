@@ -30,7 +30,13 @@ const routes = [
   },
   {
     path: '/recommed',
-    component: CommonRecommed
+    component: CommonRecommed,
+    children: [
+      {
+        path: ':uid',
+        component: SingerDetailed
+      }
+    ]
   },
   {
     path: '*',

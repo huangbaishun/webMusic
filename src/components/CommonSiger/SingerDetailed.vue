@@ -1,46 +1,50 @@
 <template>
   <transition name="slide">
-    <music-list :songs="singerdDetailed" :title="title" :bg-image="bgImage" class="singer-detailed"></music-list>
+    <music-list
+      :songs="singerdDetailed"
+      :title="title"
+      :bg-image="bgImage"
+      class="singer-detailed"
+    ></music-list>
   </transition>
 </template>
 <script>
-import { mapState } from 'vuex'
-import { createSong } from '@/utils/song'
-import MusicList from '../musiclist/index'
+import { mapState } from "vuex";
+import { createSong } from "@/utils/song";
+import MusicList from "../musiclist/index";
 export default {
-  name: '',
+  name: "",
   data() {
     return {};
   },
   computed: {
-    ...mapState([
-      'singerdDetailed'
-    ]),
+    ...mapState(["singerdDetailed"]),
     title() {
-      return this.singerdDetailed.name
+      return this.singerdDetailed.name;
     },
     bgImage() {
-      return this.singerdDetailed.img
-    }
+      return this.singerdDetailed.img;
+    },
   },
   mounted() {
-    this.init()
+    this.init();
   },
   methods: {
     init() {
-      if (typeof this.singerdDetailed.uid !== 'number') {
-        this.$router.push({
-          path: '/singer'
-        })
+      if (typeof this.singerdDetailed.uid !== "number") {
+        // this.$router.push({
+        //   path: "/singer",
+        // });
+        this.$router.back();
       }
-      let arr = []
+      let arr = [];
       for (let index = 0; index < 20; index++) {
         arr.push({
-          name: '一路向北'+ index,
-          desc: 'very good son --------------------------'
-        })
+          name: "一路向北" + index,
+          desc: "very good son --------------------------",
+        });
       }
-      this.$set(this.singerdDetailed, 'arr', arr)
+      this.$set(this.singerdDetailed, "arr", arr);
       // this.songs = this._normalizeSongs(this.singerdDetailed)
       // console.log(this.singerdDetailed);
     },
@@ -50,13 +54,13 @@ export default {
       //   let obj = {}
       //   ret.push(createSong(item))
       // });
-      ret.push(createSong(item))
-      return ret
-    }
+      ret.push(createSong(item));
+      return ret;
+    },
   },
-  components : {
-    MusicList
-  }
+  components: {
+    MusicList,
+  },
 };
 </script>
 <style lang='less' scoped>
